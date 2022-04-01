@@ -24,3 +24,4 @@ Route.resource("venues", "VenuesController").apiOnly();
 
 // Authentication Endpoint
 Route.post("/register", "AuthController.register").as("auth.register");
+Route.post("/login", "AuthController.login").as("auth.login");
