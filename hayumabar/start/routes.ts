@@ -29,7 +29,12 @@ Route.post("/otp-verification", "AuthController.otpConfirmation").as(
   "auth.verifyOtp"
 );
 
-// Venue Endpoint
+// Venue CRUD Endpoint
 Route.resource("venues", "VenuesController")
+  .apiOnly()
+  .middleware({ "*": ["auth", "owner"] });
+
+// Field CRUD Endpoint (Nested Route with Venue)
+Route.resource("venues.fields", "FieldsController")
   .apiOnly()
   .middleware({ "*": ["auth", "owner"] });

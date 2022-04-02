@@ -1,5 +1,5 @@
-import { schema } from '@ioc:Adonis/Core/Validator'
-import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+import { schema } from "@ioc:Adonis/Core/Validator";
+import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 
 export default class CreateFieldValidator {
   constructor(protected ctx: HttpContextContract) {}
@@ -23,7 +23,16 @@ export default class CreateFieldValidator {
    *     ])
    *    ```
    */
-  public schema = schema.create({})
+  public schema = schema.create({
+    name: schema.string(),
+    type: schema.enum([
+      "futsal",
+      "soccer",
+      "mini soccer",
+      "basketball",
+      "volleyball",
+    ] as const),
+  });
 
   /**
    * Custom messages for validation failures. You can make use of dot notation `(.)`
@@ -36,5 +45,5 @@ export default class CreateFieldValidator {
    * }
    *
    */
-  public messages = {}
+  public messages = {};
 }

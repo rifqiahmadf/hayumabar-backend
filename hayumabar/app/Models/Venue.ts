@@ -1,6 +1,14 @@
 import { DateTime } from "luxon";
-import { BaseModel, column, belongsTo, BelongsTo } from "@ioc:Adonis/Lucid/Orm";
+import {
+  BaseModel,
+  column,
+  belongsTo,
+  BelongsTo,
+  hasMany,
+  HasMany,
+} from "@ioc:Adonis/Lucid/Orm";
 import User from "App/Models/User";
+import Field from "./Field";
 
 export default class Venue extends BaseModel {
   @column({ isPrimary: true })
@@ -15,7 +23,7 @@ export default class Venue extends BaseModel {
   @column()
   public phone: string;
 
-  @column()
+  @column({ serializeAs: null })
   public user_id: number;
 
   @column.dateTime({ autoCreate: true })
@@ -26,4 +34,7 @@ export default class Venue extends BaseModel {
 
   @belongsTo(() => User)
   public user: BelongsTo<typeof User>;
+
+  @hasMany(() => Field)
+  public fields: HasMany<typeof Field>;
 }

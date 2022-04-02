@@ -45,5 +45,5 @@ export default class User extends BaseModel {
   }
 
   @hasMany(() => Venue)
-  public venue: HasMany<typeof Venue>;
+  public venues: HasMany<typeof Venue>;
 }

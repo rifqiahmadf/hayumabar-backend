@@ -28,7 +28,17 @@ export default class VenuesController {
     });
   }
 
-  public async show({}: HttpContextContract) {}
+  public async show({ response, params }: HttpContextContract) {
+    let venue = await Venue.query()
+      .select("id", "name", "address", "phone")
+      .preload("fields")
+      .where("id", params.id)
+      .firstOrFail();
+    response.ok({
+      message: "Berhasil mendapatkan data venue dan fields venue",
+      data: venue,
+    });
+  }
 
   public async edit({}: HttpContextContract) {}
 
@@ -42,7 +52,7 @@ export default class VenuesController {
 
     response.ok({
       message: "Venue berhasil diperbaharui",
-      venueName: venue.name,
+      updatedVenueName: venue.name,
     });
   }
 
