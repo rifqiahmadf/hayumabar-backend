@@ -3,7 +3,13 @@ import Venue from "App/Models/Venue";
 import CreateVenueValidator from "App/Validators/CreateVenueValidator";
 
 export default class VenuesController {
-  public async index({}: HttpContextContract) {}
+  public async index({ response }: HttpContextContract) {
+    let venues = await Venue.all();
+    response.ok({
+      message: "Success get data venues",
+      data: venues,
+    });
+  }
 
   public async create({}: HttpContextContract) {}
 
@@ -26,7 +32,23 @@ export default class VenuesController {
 
   public async edit({}: HttpContextContract) {}
 
-  public async update({}: HttpContextContract) {}
+  public async update({ request, response, params }: HttpContextContract) {
+    const payload = await request.validate(CreateVenueValidator);
+    let venue = await Venue.findOrFail(params.id);
+    venue.name = payload.name;
+    venue.address = payload.address;
+    venue.phone = payload.phone;
+    await venue.save();
 
-  public async destroy({}: HttpContextContract) {}
+    response.ok({
+      message: "Venue berhasil diperbaharui",
+      venueName: venue.name,
+    });
+  }
+
+  public async destroy({ params, response }: HttpContextContract) {
+    let venue = await Venue.findOrFail(params.id);
+    await venue.delete();
+    response.ok({ message: "Venue berhasil dihapus" });
+  }
 }
