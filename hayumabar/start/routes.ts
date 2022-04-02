@@ -25,3 +25,6 @@ Route.resource("venues", "VenuesController").apiOnly();
 // Authentication Endpoint
 Route.post("/register", "AuthController.register").as("auth.register");
 Route.post("/login", "AuthController.login").as("auth.login");
+Route.post("/otp-verification", "AuthController.otpConfirmation").as(
+  "auth.verifyOtp"
+);

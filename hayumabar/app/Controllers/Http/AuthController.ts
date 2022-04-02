@@ -3,6 +3,7 @@ import { schema, rules } from "@ioc:Adonis/Core/Validator";
 import User from "App/Models/User";
 import UserValidator from "App/Validators/UserValidator";
 import Mail from "@ioc:Adonis/Addons/Mail";
+import Database from "@ioc:Adonis/Lucid/Database";
 
 export default class AuthController {
   public async register({ request, response }: HttpContextContract) {
@@ -10,6 +11,10 @@ export default class AuthController {
       const data = await request.validate(UserValidator);
       const newUser = await User.create(data);
       const otp_code = Math.floor(100000 + Math.random() * 900000);
+      await Database.table("otp_codes").insert({
+        otp_code: otp_code,
+        user_id: newUser.id,
+      });
       await Mail.send((message) => {
         message
           .from("adonis.demo@sanberdev.com")
@@ -49,6 +54,25 @@ export default class AuthController {
           error: error.messages,
         });
       }
+    }
+  }
+
+  public async otpConfirmation({ request, response }: HttpContextContract) {
+    let otp_code = request.input("otp_code");
+    let email = request.input("email");
+
+    let user = await User.findByOrFail("email", email);
+    let otpCheck = await Database.query()
+      .from("otp_codes")
+      .where("otp_code", otp_code)
+      .first();
+
+    if (user.id == otpCheck.user_id) {
+      user.is_verified = true;
+      await user?.save();
+      return response.ok({ message: "Berhasil verifikasi OTP" });
+    } else {
+      return response.badRequest({ message: "Gagal verifikasi OTP" });
     }
   }
 }

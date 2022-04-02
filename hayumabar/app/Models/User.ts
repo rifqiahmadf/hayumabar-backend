@@ -18,8 +18,8 @@ export default class User extends BaseModel {
   @column()
   public role: "user" | "owner";
 
-  @column({ serializeAs: null })
-  public isVerified: boolean;
+  @column()
+  public is_verified: boolean;
 
   @column()
   public rememberMeToken?: string;
