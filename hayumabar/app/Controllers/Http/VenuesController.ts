@@ -7,16 +7,18 @@ export default class VenuesController {
 
   public async create({}: HttpContextContract) {}
 
-  public async store({ request, response }: HttpContextContract) {
+  public async store({ auth, request, response }: HttpContextContract) {
     const payload = await request.validate(CreateVenueValidator);
+    const authUser = auth.user;
     const newVenue = await Venue.create({
       name: payload.name,
       address: payload.address,
       phone: payload.phone,
+      user_id: authUser?.id,
     });
     response.created({
       message: "Venue berhasil dibuat",
-      id: newVenue.id,
+      venueName: newVenue.name,
     });
   }
 

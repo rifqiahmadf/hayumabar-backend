@@ -20,8 +20,6 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
-Route.resource("venues", "VenuesController").apiOnly();
-
 // Authentication Endpoint
 Route.post("/register", "AuthController.register").as("auth.register");
 Route.post("/login", "AuthController.login")
@@ -30,3 +28,8 @@ Route.post("/login", "AuthController.login")
 Route.post("/otp-verification", "AuthController.otpConfirmation").as(
   "auth.verifyOtp"
 );
+
+// Venue Endpoint
+Route.resource("venues", "VenuesController")
+  .apiOnly()
+  .middleware({ "*": ["auth", "owner"] });
