@@ -38,3 +38,7 @@ Route.resource("venues", "VenuesController")
 Route.resource("venues.fields", "FieldsController")
   .apiOnly()
   .middleware({ "*": ["auth", "owner"] });
+
+Route.post("/venues/:venue_id/bookings", "BookingsController.store")
+  .as("booking.store")
+  .middleware(["auth", "user"]);

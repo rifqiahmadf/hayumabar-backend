@@ -7,7 +7,8 @@ import {
   hasMany,
   HasMany,
 } from "@ioc:Adonis/Lucid/Orm";
-import Venue from "./Venue";
+import Venue from "App/Models/Venue";
+import Booking from "App/Models/Booking";
 
 export default class User extends BaseModel {
   @column({ isPrimary: true })
@@ -31,10 +32,10 @@ export default class User extends BaseModel {
   @column()
   public rememberMeToken?: string;
 
-  @column.dateTime({ autoCreate: true })
+  @column.dateTime({ autoCreate: true, serializeAs: null })
   public createdAt: DateTime;
 
-  @column.dateTime({ autoCreate: true, autoUpdate: true })
+  @column.dateTime({ autoCreate: true, autoUpdate: true, serializeAs: null })
   public updatedAt: DateTime;
 
   @beforeSave()
@@ -46,4 +47,7 @@ export default class User extends BaseModel {
 
   @hasMany(() => Venue)
   public venues: HasMany<typeof Venue>;
+
+  @hasMany(() => Booking)
+  public bookings: HasMany<typeof Booking>;
 }

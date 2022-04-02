@@ -6,7 +6,7 @@ export default class VenuesController {
   public async index({ response }: HttpContextContract) {
     let venues = await Venue.all();
     response.ok({
-      message: "Success get data venues",
+      message: "Berhasil get all data venues",
       data: venues,
     });
   }
@@ -30,7 +30,7 @@ export default class VenuesController {
 
   public async show({ response, params }: HttpContextContract) {
     let venue = await Venue.query()
-      .select("id", "name", "address", "phone")
+      .select("*")
       .preload("fields")
       .where("id", params.id)
       .firstOrFail();
