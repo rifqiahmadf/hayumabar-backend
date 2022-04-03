@@ -1,9 +1,9 @@
 # final-project-jcc
 
-○ Nama Project: Hayu Mabar
+○ Nama Project: hayumabar
 ○ Nama Pembuat project: Muhammad Fauzi Azhar
 ○ Email: muhfauziazhar@gmail.com
-○ Link Deploy Heroku
+○ Link Deploy Heroku: https://hayumabar.herokuapp.com/docs/index.html
 ○ Contoh User :
 Role Owner
 ve.natsu@gmail.com (password: venatsu)
