@@ -6,6 +6,8 @@ import {
   BaseModel,
   hasMany,
   HasMany,
+  manyToMany,
+  ManyToMany,
 } from "@ioc:Adonis/Lucid/Orm";
 import Venue from "App/Models/Venue";
 import Booking from "App/Models/Booking";
@@ -23,13 +25,13 @@ export default class User extends BaseModel {
   @column({ serializeAs: null })
   public password: string;
 
-  @column()
+  @column({ serializeAs: null })
   public role: "user" | "owner";
 
-  @column()
+  @column({ serializeAs: null })
   public is_verified: boolean;
 
-  @column()
+  @column({ serializeAs: null })
   public rememberMeToken?: string;
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
@@ -50,4 +52,9 @@ export default class User extends BaseModel {
 
   @hasMany(() => Booking)
   public bookings: HasMany<typeof Booking>;
+
+  @manyToMany(() => Booking, {
+    pivotTable: "booking_users",
+  })
+  public bookingSchedule: ManyToMany<typeof Booking>;
 }

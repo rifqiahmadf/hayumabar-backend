@@ -21,24 +21,71 @@
 import Route from "@ioc:Adonis/Core/Route";
 
 // Authentication Endpoint
-Route.post("/register", "AuthController.register").as("auth.register");
-Route.post("/login", "AuthController.login")
-  .as("auth.login")
-  .middleware(["verify"]);
-Route.post("/otp-verification", "AuthController.otpConfirmation").as(
-  "auth.verifyOtp"
-);
+Route.group(() => {
+  Route.post("/register", "AuthController.register").as("auth.register");
+  Route.post("/login", "AuthController.login")
+    .as("auth.login")
+    .middleware(["verify"]);
+  Route.post("/otp-verification", "AuthController.otpConfirmation").as(
+    "auth.verifyOtp"
+  );
+}).prefix("/api/v1");
 
-// Venue CRUD Endpoint
-Route.resource("venues", "VenuesController")
-  .apiOnly()
-  .middleware({ "*": ["auth", "owner"] });
+Route.group(() => {
+  // Read Endpoint Venue
+  Route.get("/venues", "VenuesController.index").as("venue.index");
+  Route.get("/venues/:id", "VenuesController.show").as("venue.show");
+  // Read Endpoint Field
+  Route.get("/venues/:venue_id/fields", "FieldsController.index").as(
+    "field.index"
+  );
+  Route.get("/venues/:venue_id/fields/:id", "FieldsController.show").as(
+    "field.show"
+  );
+})
+  .prefix("/api/v1")
+  .middleware(["auth"]);
 
-// Field CRUD Endpoint (Nested Route with Venue)
-Route.resource("venues.fields", "FieldsController")
-  .apiOnly()
-  .middleware({ "*": ["auth", "owner"] });
+Route.group(() => {
+  // Venue CUD Endpoint
+  Route.post("/venues", "VenuesController.store").as("venues.store");
+  Route.put("/venues/:id", "VenuesController.update").as("venues.update");
+  Route.delete("/venues/:id", "VenuesController.destroy").as("venues.destroy");
 
-Route.post("/venues/:venue_id/bookings", "BookingsController.store")
-  .as("booking.store")
+  // Field CUD Endpoint (Nested Route with Venue)
+  Route.post("/venues/:venue_id/fields/", "FieldsController.store").as(
+    "field.store"
+  );
+  Route.put("/venues/:venue_id/fields/:id", "FieldsController.update").as(
+    "field.update"
+  );
+  Route.delete("/venues/:venue_id/fields", "FieldsController.destroy").as(
+    "field.destroy"
+  );
+})
+  .prefix("/api/v1")
+  .middleware(["auth", "owner"]);
+
+Route.group(() => {
+  // Booking Create Endpoint POST /venues/:venue_id/bookings
+  Route.post("/venues/:venue_id/bookings", "BookingsController.store").as(
+    "booking.store"
+  );
+  // Booking RUD Endpoint
+  Route.get("/bookings/", "BookingsController.index").as("booking.index");
+  Route.get("/bookings/:id", "BookingsController.show").as("booking.show");
+  Route.put("/bookings/:id", "BookingsController.update").as("booking.update");
+  Route.delete("/bookings/:id", "BookingsController.destroy").as(
+    "booking.destroy"
+  );
+  // Join, Unjoin, Schedule Booking
+  Route.put("/bookings/:id/join", "BookingsController.join").as("booking.join");
+  Route.put("/bookings/:id/unjoin", "BookingsController.unjoin").as(
+    "booking.unjoin"
+  );
+  Route.get("/schedules", "BookingsController.schedules").as(
+    "booking.schedule"
+  );
+})
+  .prefix("/api/v1")
   .middleware(["auth", "user"]);

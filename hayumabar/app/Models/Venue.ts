@@ -23,8 +23,8 @@ export default class Venue extends BaseModel {
   @column()
   public phone: string;
 
-  @column({ serializeAs: null })
-  public user_id: number;
+  @column()
+  public userId: number;
 
   @column.dateTime({ autoCreate: true, serializeAs: null })
   public createdAt: DateTime;
