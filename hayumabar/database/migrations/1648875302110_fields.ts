@@ -17,7 +17,8 @@ export default class Fields extends BaseSchema {
       table
         .integer("venue_id")
         .unsigned()
-        .references("venues.id")
+        .references("id")
+        .inTable("venues")
         .onDelete("CASCADE");
       table.timestamps(true, true);
     });

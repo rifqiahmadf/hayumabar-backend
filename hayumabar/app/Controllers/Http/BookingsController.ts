@@ -6,6 +6,21 @@ import Venue from "App/Models/Venue";
 import CreateBookingValidator from "App/Validators/CreateBookingValidator";
 
 export default class BookingsController {
+  /**
+   * @swagger
+   * /api/v1/bookings/:
+   *   get:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for get all data bookings
+   *    responses:
+   *      200:
+   *        description: Success get all data bookings
+   *      400:
+   *        description: Invalid request
+   */
   public async index({ response }: HttpContextContract) {
     const bookings = await Booking.query().select("*").preload("field");
     response.ok({
@@ -14,6 +29,40 @@ export default class BookingsController {
     });
   }
 
+  /**
+   * @swagger
+   * /api/v1/venues/{venue_id}/bookings:
+   *   post:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Venue
+   *    description: Endpoint for create booking
+   *    parameters:
+   *      - name: venue_id
+   *        description: Venue ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    requestBody:
+   *      content:
+   *        application/x-www-form-urlencoded:
+   *          schema:
+   *            $ref: '#definitions/Booking'
+   *        application/json:
+   *          schema:
+   *            $ref: '#definitions/Booking'
+   *    responses:
+   *      201:
+   *        description: Success create booking
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async store({ request, response, auth, params }: HttpContextContract) {
     const payload = await request.validate(CreateBookingValidator);
     const user = auth.user!;
@@ -36,6 +85,30 @@ export default class BookingsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/bookings/{id}:
+   *   get:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for get booking e by booking ID
+   *    parameters:
+   *      - name: id
+   *        description: Booking ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    responses:
+   *      200:
+   *        description: Success get data booking e by booking ID
+   *      400:
+   *        description: Invalid request
+   */
   public async show({ response, params }: HttpContextContract) {
     const data = await Booking.query()
       .where("id", params.id)
@@ -49,6 +122,40 @@ export default class BookingsController {
     });
   }
 
+  /**
+   * @swagger
+   * /api/v1/bookings/{id}:
+   *   put:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for update booking
+   *    parameters:
+   *      - name: id
+   *        description: Booking ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    requestBody:
+   *      content:
+   *        application/x-www-form-urlencoded:
+   *          schema:
+   *            $ref: '#definitions/Booking'
+   *        application/json:
+   *          schema:
+   *            $ref: '#definitions/Booking'
+   *    responses:
+   *      200:
+   *        description: Success update booking
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async update({
     auth,
     response,
@@ -74,6 +181,32 @@ export default class BookingsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/bookings/{id}:
+   *   delete:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for delete booking
+   *    parameters:
+   *      - name: id
+   *        description: Booking ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    responses:
+   *      200:
+   *        description: Success delete booking
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async destroy({ auth, response, params }: HttpContextContract) {
     const user = auth.user!;
     const booking = await Booking.findOrFail(params.id);
@@ -83,6 +216,32 @@ export default class BookingsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/bookings/{id}/join:
+   *   put:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for join booking
+   *    parameters:
+   *      - name: id
+   *        description: Booking ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    responses:
+   *      200:
+   *        description: Success join booking
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async join({ auth, response, params }: HttpContextContract) {
     const user = auth.user!;
     const booking = await Booking.findOrFail(params.id);
@@ -101,6 +260,32 @@ export default class BookingsController {
     }
   }
 
+  /**
+   * @swagger
+   * /api/v1/bookings/{id}/unjoin:
+   *   put:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for unjoin booking
+   *    parameters:
+   *      - name: id
+   *        description: Booking ID
+   *        in: path
+   *        required: true
+   *        schema:
+   *            type: integer
+   *            minimum: 1
+   *            example: 1
+   *    responses:
+   *      200:
+   *        description: Success unjoin booking
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async unjoin({ auth, response, params }: HttpContextContract) {
     const user = auth.user!;
     const booking = await Booking.findOrFail(params.id);
@@ -108,6 +293,23 @@ export default class BookingsController {
     response.ok({ message: "berhasil unjoin" });
   }
 
+  /**
+   * @swagger
+   * /api/v1/schedules:
+   *   get:
+   *    security:
+   *      - bearerAuth: []
+   *    tags :
+   *      - Booking
+   *    description: Endpoint for get schedules from login user
+   *    responses:
+   *      200:
+   *        description: Success get data booking e by booking ID
+   *      400:
+   *        description: Invalid request
+   *      401:
+   *        description: Only user can access this route
+   */
   public async schedules({ auth, response }: HttpContextContract) {
     const authUser = auth.user!;
     let userBookSchedule = await User.query()

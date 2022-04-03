@@ -11,6 +11,32 @@ import User from "App/Models/User";
 import Field from "App/Models/Field";
 
 export default class Booking extends BaseModel {
+  /**
+   * @swagger
+   * definitions:
+   *    Booking:
+   *      type: object
+   *      properties:
+   *         play_date_start:
+   *           type: string
+   *           format: date
+   *           example: '2022-09-10 12:00:00'
+   *         play_date_end:
+   *           type: string
+   *           format: date
+   *           example: '2022-09-10 14:00:00'
+   *         total_players:
+   *           type: integer
+   *           example: '10'
+   *         field_id:
+   *           type: integer
+   *           example: '1'
+   *      required:
+   *        - play_date_start
+   *        - play_date_end
+   *        - total_players
+   *        - field_id
+   */
   public serializeExtras() {
     return {
       players_count: this.$extras.players_count,

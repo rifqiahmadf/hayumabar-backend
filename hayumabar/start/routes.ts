@@ -20,6 +20,10 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
+Route.get("/", async ({ response }) => {
+  response.redirect().toPath("docs/index.html");
+});
+
 // Authentication Endpoint
 Route.group(() => {
   Route.post("/register", "AuthController.register").as("auth.register");
@@ -59,7 +63,7 @@ Route.group(() => {
   Route.put("/venues/:venue_id/fields/:id", "FieldsController.update").as(
     "field.update"
   );
-  Route.delete("/venues/:venue_id/fields", "FieldsController.destroy").as(
+  Route.delete("/venues/:venue_id/fields/:id", "FieldsController.destroy").as(
     "field.destroy"
   );
 })

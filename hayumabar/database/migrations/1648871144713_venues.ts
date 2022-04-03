@@ -12,7 +12,8 @@ export default class Venues extends BaseSchema {
       table
         .integer("user_id")
         .unsigned()
-        .references("users.id")
+        .references("id")
+        .inTable("users")
         .onDelete("CASCADE");
       table.timestamps(true, true);
     });
